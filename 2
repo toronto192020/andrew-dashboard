@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal Timeline Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background for glassmorphism */
+            background: linear-gradient(to bottom right, #1a202c, #2d3748);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Glassmorphic effect base class */
+        .glassmorphic {
+            background-color: rgba(255, 255, 255, 0.08); /* Slightly visible white */
+            backdrop-filter: blur(15px); /* Strong blur effect */
+            border: 1px solid rgba(255, 255, 255, 0.15); /* Subtle white border */
+            border-radius: 20px; /* Rounded corners */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Soft shadow */
+        }
+
+        /* Specific styling for sections */
+        .glassmorphic-section {
+            background-color: rgba(255, 255, 255, 0.05); /* Lighter for sections */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hover card styling */
+        .hover-card {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7); /* Darker background for readability */
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            white-space: nowrap;
+            pointer-events: none; /* Allows clicks to pass through to elements behind if not hovered */
+        }
+
+        .item-with-hover:hover .hover-card {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Ensure responsive charts */
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="text-gray-100">
+    <div class="dashboard-container w-full max-w-7xl mx-auto p-6 glassmorphic">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">Legal Timeline: Public Trustee & Capacity Dispute</h1>
+            <p class="text-lg text-gray-300">An overview of key events and legal actions.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Donut Chart Section -->
+            <div class="glassmorphic-section p-6 flex flex-col items-center justify-center col-span-1 md:col-span-1 lg:col-span-1">
+                <h2 class="text-2xl font-semibold mb-4 text-white">Time Spent Per Legal Domain</h2>
+                <div class="relative w-full max-w-xs mx-auto">
+                    <canvas id="timeSpentChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bar Chart Section -->
+            <div class="glassmorphic-section p-6 flex flex-col items-center justify-center col-span-1 md:col-span-1 lg:col-span-2">
+                <h2 class="text-2xl font-semibold mb-4 text-white">Number of Legal Actions by Year (2018–2025)</h2>
+                <div class="relative w-full max-w-2xl mx-auto">
+                    <canvas id="legalActionsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- QCAT & OPG Proceedings -->
+            <div class="glassmorphic-section p-6">
+                <h2 class="text-2xl font-semibold mb-4 text-white">QCAT & OPG Proceedings</h2>
+                <ul class="list-disc list-inside text-gray-200 space-y-2">
+                    <li class="item-with-hover relative">
+                        Application for Appointment of Guardian (2019)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/qcat-exhibit-1" target="_blank" class="text-blue-300 hover:underline">View Exhibit QCAT-001</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Review of Public Trustee Decision (2020)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/qcat-exhibit-2" target="_blank" class="text-blue-300 hover:underline">View Exhibit QCAT-002</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        OPG Investigation Report (2021)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/opg-report-a" target="_blank" class="text-blue-300 hover:underline">View Exhibit OPG-A</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Capacity Assessment Hearing (2022)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/qcat-exhibit-3" target="_blank" class="text-blue-300 hover:underline">View Exhibit QCAT-003</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- CCDTS Evidence & Letters -->
+            <div class="glassmorphic-section p-6">
+                <h2 class="text-2xl font-semibold mb-4 text-white">CCDTS Evidence & Letters</h2>
+                <ul class="list-disc list-inside text-gray-200 space-y-2">
+                    <li class="item-with-hover relative">
+                        Letter to Public Trustee regarding asset valuation (2019)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/ccdts-letter-1" target="_blank" class="text-blue-300 hover:underline">View Exhibit CCDTS-L001</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Expert witness statement on financial capacity (2020)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/ccdts-evidence-1" target="_blank" class="text-blue-300 hover:underline">View Exhibit CCDTS-E001</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Correspondence regarding property sale (2021)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/ccdts-letter-2" target="_blank" class="text-blue-300 hover:underline">View Exhibit CCDTS-L002</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Summary of care needs assessment (2023)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/ccdts-evidence-2" target="_blank" class="text-blue-300 hover:underline">View Exhibit CCDTS-E002</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mismanagement Incidents -->
+            <div class="glassmorphic-section p-6">
+                <h2 class="text-2xl font-semibold mb-4 text-white">Mismanagement Incidents</h2>
+                <ul class="list-disc list-inside text-gray-200 space-y-2">
+                    <li class="item-with-hover relative">
+                        Unauthorised withdrawal from trust account (2018)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/incident-report-1" target="_blank" class="text-blue-300 hover:underline">View Report MI-001</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Failure to pay medical bills on time (2019)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/incident-report-2" target="_blank" class="text-blue-300 hover:underline">View Report MI-002</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Loss of important legal documents (2020)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/incident-report-3" target="_blank" class="text-blue-300 hover:underline">View Report MI-003</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Property maintenance neglect (2022)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/incident-report-4" target="_blank" class="text-blue-300 hover:underline">View Report MI-004</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Legal Correspondence Log -->
+            <div class="glassmorphic-section p-6">
+                <h2 class="text-2xl font-semibold mb-4 text-white">Legal Correspondence Log</h2>
+                <ul class="list-disc list-inside text-gray-200 space-y-2">
+                    <li class="item-with-hover relative">
+                        Email from Solicitor A to Public Trustee (Jan 2019)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/correspondence-1" target="_blank" class="text-blue-300 hover:underline">View Log LCL-001</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Formal complaint letter to OPG (Mar 2020)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/correspondence-2" target="_blank" class="text-blue-300 hover:underline">View Log LCL-002</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Response from Public Trustee legal department (Jul 2021)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/correspondence-3" target="_blank" class="text-blue-300 hover:underline">View Log LCL-003</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Notice of Hearing from QCAT (Apr 2022)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/correspondence-4" target="_blank" class="text-blue-300 hover:underline">View Log LCL-004</a>
+                        </div>
+                    </li>
+                    <li class="item-with-hover relative">
+                        Settlement offer communication (Nov 2024)
+                        <div class="hover-card absolute top-full left-0 mt-2">
+                            <a href="https://example.com/correspondence-5" target="_blank" class="text-blue-300 hover:underline">View Log LCL-005</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Ensure the DOM is fully loaded before running scripts
+        window.onload = function() {
+            // Donut Chart: % Time Spent Per Legal Domain
+            const timeSpentCtx = document.getElementById('timeSpentChart').getContext('2d');
+            new Chart(timeSpentCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Capacity Law', 'Trust Law', 'Property Law', 'Administrative Law', 'Family Law'],
+                    datasets: [{
+                        data: [35, 25, 15, 15, 10], // Example percentages
+                        backgroundColor: [
+                            'rgba(147, 51, 234, 0.7)', /* Purple */
+                            'rgba(59, 130, 246, 0.7)', /* Blue */
+                            'rgba(16, 185, 129, 0.7)', /* Green */
+                            'rgba(245, 158, 11, 0.7)',  /* Orange */
+                            'rgba(239, 68, 68, 0.7)'   /* Red */
+                        ],
+                        borderColor: [
+                            'rgba(147, 51, 234, 1)',
+                            'rgba(59, 130, 246, 1)',
+                            'rgba(16, 185, 129, 1)',
+                            'rgba(245, 158, 11, 1)',
+                            'rgba(239, 68, 68, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#E5E7EB' // Light gray for legend text
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += context.parsed + '%';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Bar Chart: # of Legal Actions by Year (2018–2025)
+            const legalActionsCtx = document.getElementById('legalActionsChart').getContext('2d');
+            new Chart(legalActionsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                    datasets: [{
+                        label: 'Number of Legal Actions',
+                        data: [3, 7, 10, 8, 12, 9, 15, 6], // Example data
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)', /* Blue */
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#E5E7EB' // Light gray for Y-axis ticks
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)' // Lighter grid lines
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#E5E7EB' // Light gray for X-axis ticks
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)' // Lighter grid lines
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false // No legend needed for single dataset bar chart
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + context.parsed.y;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        };
+    </script>
+</body>
+</html>
