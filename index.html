@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard: Andrew Bruce-Sanders Action Summary (2018-2025)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: A thematic dashboard structure was chosen over a linear list to allow users to intuitively navigate to areas of interest. The key domains (Legal, Financial, Property, Systems) are presented as high-level, interactive sections. This facilitates non-linear exploration, enabling a lawyer to focus on the 'Legal' section while a financial analyst reviews 'Financial Defence'. Interactions include clicking on navigation items to scroll to sections, and hovering over chart elements for tooltips. This structure best serves the goal of making a complex, multi-year effort comprehensible and defensible to different audiences. -->
+    <!-- Visualization & Content Choices: The report contains qualitative achievements and quantitative data points. Goals: Inform, Compare, Organize. Methods: Interactive cards for qualitative summaries (HTML/CSS), a donut chart for visualizing effort distribution (Chart.js), and a bar chart for financial figures (Chart.js). Interactions: Hover-to-highlight cards and chart tooltips provide deeper context on demand. Justification: These choices break down a dense report into digestible, visually engaging components, improving clarity and retention without overwhelming the user. The charts provide a quick quantitative overview, while the cards offer detailed qualitative insights. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfcfb; /* Warm Off-White */
+            color: #3d3d3d;
+        }
+        .nav-active {
+            color: #c084fc;
+            border-bottom-color: #c084fc;
+        }
+        .nav-item {
+            transition: color 0.3s, border-bottom-color 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #f0e9e4; /* Soft Taupe Border */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+         @media (min-width: 768px) { .chart-container { height: 400px; } }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-purple-600 mb-2">Comprehensive Action Summary</h1>
+            <p class="text-lg text-gray-600">Andrew Bruce-Sanders | 2018–2025</p>
+            <p class="mt-2 text-sm text-gray-500">An interactive overview of legal, financial, property, and system-building initiatives.</p>
+        </header>
+
+        <nav id="navbar" class="sticky top-0 bg-white/80 backdrop-blur-sm z-10 mb-12 py-3 border-b border-gray-200">
+            <ul class="flex justify-center space-x-4 sm:space-x-8 text-sm sm:text-base font-medium text-gray-500">
+                <li><a href="#summary" class="nav-item nav-active pb-2">Dashboard</a></li>
+                <li><a href="#legal" class="nav-item pb-2">Legal & Advocacy</a></li>
+                <li><a href="#financial" class="nav-item pb-2">Financial Defence</a></li>
+                <li><a href="#property" class="nav-item pb-2">Property & Recovery</a></li>
+                <li><a href="#systems" class="nav-item pb-2">Systems & Tech</a></li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            
+            <!-- Summary Dashboard Section -->
+            <section id="summary" class="mb-16 scroll-mt-24">
+                 <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-purple-600">Action Dashboard</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">This dashboard provides a high-level overview of the extensive actions taken. The chart visualizes the distribution of effort across key domains, while key metrics highlight significant quantifiable achievements.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="effortDistributionChart"></canvas>
+                    </div>
+                    <div class="space-y-4">
+                         <div class="card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg text-purple-600">Key Roles Undertaken</h3>
+                            <p class="text-gray-700 mt-1">Son, Carer, Legal Executor, System Architect, and tireless Advocate for human rights and proper administration.</p>
+                        </div>
+                        <div class="card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg text-purple-600">Financial Impact</h3>
+                            <p class="text-gray-700 mt-1">Identified and initiated recovery of over **$400,000** in forgotten superannuation and contested a **$9,000** loss due to provider negligence.</p>
+                        </div>
+                        <div class="card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg text-purple-600">Documentation Volume</h3>
+                            <p class="text-gray-700 mt-1">Authored and managed over **100** distinct legal, logistical, and chronological documents to support all claims and advocacy efforts.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Legal & Human Rights Advocacy Section -->
+            <section id="legal" class="mb-16 scroll-mt-24">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-purple-600">⚖️ Legal & Human Rights Advocacy</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">This section details the persistent legal challenges against the blanket incapacity assumption and the fight for Cheryl's rights under both national and international law. Actions focused on demonstrating the flawed administrative process and its severe consequences.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Challenged Incapacity Assumption</h3>
+                        <p class="mt-2 text-gray-700">Actively contested the blanket incapacity ruling by the Public Trustee/QCAT, which lacked rigorous, rights-based assessment.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Advocated for SDM</h3>
+                        <p class="mt-2 text-gray-700">Consistently argued for Supported Decision-Making (SDM) instead of full guardianship, aligning with clinical evidence and modern human rights principles.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Preserved Clinical Evidence</h3>
+                        <p class="mt-2 text-gray-700">Secured and presented CCDTS gerontologist reports showing fluctuating capacity, directly contradicting the official narrative.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Filed Formal Complaints</h3>
+                        <p class="mt-2 text-gray-700">Dispatched comprehensive legal summaries and formal complaints to AFCA and other authorities, challenging mismanagement.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Created Legal Bundles</h3>
+                        <p class="mt-2 text-gray-700">Developed evidentiary bundles linking systemic failures to direct harm, such as blocked insurance claims and financial losses.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Referenced UNCRPD</h3>
+                        <p class="mt-2 text-gray-700">Grounded the advocacy in international law, citing violations of the UN Convention on the Rights of Persons with Disabilities.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Financial Defense Section -->
+            <section id="financial" class="mb-16 scroll-mt-24">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-purple-600">💰 Financial Defense & Digital Automation</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">This area covers the proactive efforts to recover and protect assets, address severe financial mismanagement by the Public Trustee, and automate security. Key actions include recovering significant funds and challenging a major financial loss due to negligence.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                     <div class="space-y-4">
+                        <div class="card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg">Superannuation Recovery</h3>
+                            <p class="mt-2 text-gray-700">Identified and began the consolidation process for over $400,000 in forgotten superannuation, a task neglected by the administrator.</p>
+                        </div>
+                        <div class="card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg text-red-600">Challenged Critical Financial Loss</h3>
+                            <p class="mt-2 text-gray-700">Actively pursued the Public Trustee over the **direct loss of $9,000**, which was paid to a home care provider for services that were never rendered.</p>
+                        </div>
+                        <div class="card p-6 rounded-xl">
+                            <h3 class="font-bold text-lg">SMSF Compliance Driven</h3>
+                            <p class="mt-2 text-gray-700">Took charge of managing the Bruder SMSF's outstanding tax returns (since 2018) after the Public Trustee failed to act on their authority.</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="financialMetricsChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Property & Recovery Section -->
+            <section id="property" class="mb-16 scroll-mt-24">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-purple-600">🏠 Property, Insurance & Emergency Recovery</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">This section outlines the hands-on management of real property and assets, particularly the Kenmore residence. It covers the fight to recover from damage, navigate insurance claims, and overcome administrative blockages imposed by the Public Trustee.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Property Restoration</h3>
+                        <p class="mt-2 text-gray-700">Fought to restore and secure the 115 Bielby Road property after it was affected by flood, a fall, and other damage.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Oversaw All Repairs</h3>
+                        <p class="mt-2 text-gray-700">Managed all aspects of repairs, including fencing, container access, and resolving the blockage caused by the Tesla vehicle.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Documented Delays</h3>
+                        <p class="mt-2 text-gray-700">Created detailed, annotated timelines proving that remediation delays were directly caused by trustee interference and inaction.</p>
+                    </div>
+                     <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Engaged Stakeholders</h3>
+                        <p class="mt-2 text-gray-700">Persistently engaged with Hollard Insurance, AJ Grant, Ambrose, and BlueCare to advance claims and repairs.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Activated EPOA Proactively</h3>
+                        <p class="mt-2 text-gray-700">Used the Enduring Power of Attorney to regain control over claim routing and care planning when the Public Trustee was unresponsive.</p>
+                    </div>
+                     <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Managed Fleet & Assets</h3>
+                        <p class="mt-2 text-gray-700">Coordinated access and recovery for multiple vehicles (Nissan, BMW, Tesla, Kia) and linked them to ongoing restitution claims.</p>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Systems & Tech Section -->
+            <section id="systems" class="scroll-mt-24">
+                 <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-purple-600">💡 Systems, Tech & Legacy</h2>
+                     <p class="mt-2 text-gray-600 max-w-2xl mx-auto">To manage the overwhelming complexity, a sophisticated support infrastructure, "Empire Bridge," was designed and built. This section highlights the creation of AI-powered systems for care, legal support, and cognitive regulation, alongside legacy preservation.</p>
+                </div>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Built "Empire Bridge"</h3>
+                        <p class="mt-2 text-gray-700">Developed a custom AI infrastructure to support care dashboards, reduce cognitive load, and automate reminders via Siri and Chromecast.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Deployed AI Agent Teams</h3>
+                        <p class="mt-2 text-gray-700">Created specialized AI agents (Gina, Saul, Overwatch) to assist with legal summaries, task management, and monitoring.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Medical & Cognitive Support</h3>
+                        <p class="mt-2 text-gray-700">Integrated medical data into the Empire system and created visual fail-safes (QR codes, laminated cards) for Cheryl's care protocols.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Documentation Automation</h3>
+                        <p class="mt-2 text-gray-700">Systematized the creation of over 100 documents, including PDF packs, chronologies, and visual dashboards for multiple stakeholders.</p>
+                    </div>
+                    <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Enforced Cognitive Protocol</h3>
+                        <p class="mt-2 text-gray-700">Used the BRADIX.PROTOCOL // DO-NOT-DRAIN to preserve energy and reject false narratives from third parties, protecting case integrity.</p>
+                    </div>
+                     <div class="card p-6 rounded-xl">
+                        <h3 class="font-bold text-lg">Legacy & Future Planning</h3>
+                        <p class="mt-2 text-gray-700">Preserved family legacy assets like Ted Harrison art and prepared essential future-planning documents (Will, Smart Life File, Care Agreements).</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Data for charts
+            const effortData = {
+                labels: ['Legal & Advocacy', 'Financial Defence', 'Property & Recovery', 'Systems & Tech'],
+                datasets: [{
+                    label: 'Distribution of Effort',
+                    data: [35, 25, 25, 15],
+                    backgroundColor: [
+                        'rgba(168, 85, 247, 0.7)',
+                        'rgba(129, 140, 248, 0.7)',
+                        'rgba(59, 130, 246, 0.7)',
+                        'rgba(34, 197, 94, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(168, 85, 247, 1)',
+                        'rgba(129, 140, 248, 1)',
+                        'rgba(59, 130, 246, 1)',
+                        'rgba(34, 197, 94, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const financialData = {
+                labels: ['Super Recovered', 'Negligent Loss Challenged'],
+                datasets: [{
+                    label: 'Amount ($)',
+                    data: [400000, 9000],
+                    backgroundColor: [
+                        'rgba(34, 197, 94, 0.7)',
+                        'rgba(239, 68, 68, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(34, 197, 94, 1)',
+                        'rgba(239, 68, 68, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+            
+            // Chart.js Configuration
+            const chartOptions = (title) => ({
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                         labels: {
+                            font: {
+                                family: 'Inter',
+                                size: 12
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: title,
+                        font: {
+                            family: 'Inter',
+                            size: 16,
+                            weight: '600'
+                        },
+                        color: '#3d3d3d'
+                    },
+                    tooltip: {
+                         callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                     label += new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(context.parsed.y);
+                                }
+                                 if (context.parsed.x !== null && context.chart.id === 'effortDistributionChart') {
+                                    label = context.label + ': ' + context.parsed + '%'
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Render Charts
+            const effortCtx = document.getElementById('effortDistributionChart').getContext('2d');
+            new Chart(effortCtx, {
+                type: 'doughnut',
+                data: effortData,
+                options: chartOptions('Distribution of Effort & Focus (%)'),
+                 id: 'effortDistributionChart'
+            });
+
+            const financialCtx = document.getElementById('financialMetricsChart').getContext('2d');
+            new Chart(financialCtx, {
+                type: 'bar',
+                data: financialData,
+                options: {
+                    ...chartOptions('Key Financial Metrics'),
+                    scales: {
+                         y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return '$' + (value / 1000) + 'k';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Navbar Active State on Scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('#navbar a');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('nav-active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+
+            // Smooth scroll for nav links
+            navLinks.forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
