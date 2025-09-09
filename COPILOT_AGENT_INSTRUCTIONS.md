@@ -1,0 +1,28 @@
+# Copilot Agent Instructions: Cross-Platform (iOS, Android, Windows, macOS, Pi, Web)
+
+- Always create/modify tests with code changes:
+  - Python: pytest
+  - Android: JUnit, Espresso
+  - iOS/macOS: XCTest, SwiftLint
+  - Windows: MSTest/NUnit
+  - Raspberry Pi: pytest, hardware mocks
+  - Web: Jest, Cypress
+- PRs must include a summary of integration impact (automations, endpoints, UI changes).
+- For Home Assistant:
+  - Use YAML schemas, async Python integrations, validate with `hass --script check_config`.
+- For Notion:
+  - Use official API, handle rate limits, add error logging.
+- For Tesla API:
+  - Secure secrets via GitHub Actions, use official endpoints, log requests/responses.
+- For Tasker/Android:
+  - Use MVVM/Clean Architecture, WorkManager for background, lint/codecheck before PR.
+- For iOS/macOS:
+  - Follow Swift best practices, use Combine/SwiftUI where possible, document new features.
+- For Windows:
+  - Use .NET best practices, async/await, document PowerShell scripts.
+- For Raspberry Pi:
+  - Follow GPIO safety, document hardware requirements, prefer Docker for deployments.
+- Prefer small PRs (<300 LOC); split into stacked PRs for larger changes.
+- Always document new automations, API endpoints, or Tasker/iOS/Windows profiles in `docs/`.
+- Use Workspace for planning multi-file changes; attach the plan in PR body.
+- Use Copilot Spec Kit for new features, and attach the spec to the PR.
